@@ -27,6 +27,8 @@ import com.cst438.domain.Enrollment;
 import com.cst438.domain.GradebookDTO;
 import com.cst438.services.RegistrationService;
 
+import java.sql.Date;
+
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001"})
 public class GradeBookController {
@@ -42,6 +44,40 @@ public class GradeBookController {
 	
 	@Autowired
 	RegistrationService registrationService;
+	
+	//add new assignment
+	@PostMapping("/gradebook/{course_id}/add")
+	@Transactional
+	public void addAssignment(@RequestBody Date due_date, @RequestBody String name, @PathVariable int course_id) {
+//		String email = "dwisneski@csumb.edu";
+		
+		assignmentRepository.addNewAssignment(due_date, name, course_id);
+		
+//		Assignment newAssignment = new Assignment();
+//		newAssignment.setName(name);
+//		newAssignment.setDueDate(date);
+//		
+//		List<Assignment> assignments = assignmentRepository.getAssignmentListByCourseID(email, course_id);
+//		assignments.add(newAssignment);
+//		assignmentRepository.save(assignments);
+		
+	}
+	
+	//change name of assignment
+	@PostMapping("/gradebook/{id}/updateName")
+	@Transactional
+	public void updateAssignmentName(@RequestBody String name, @PathVariable int assignment_id) {
+		assignmentRepository.updateAssignmentName(name, assignment_id);
+			
+	}
+	
+	//delete assignment
+	@PostMapping("/gradebook/{id}/delete")
+	@Transactional
+	public void deleteAssignment(@PathVariable int assignment_id) {
+		assignmentRepository.deleteAssignment(assignment_id);
+				
+	}
 	
 	// get assignments for an instructor that need grading
 	@GetMapping("/gradebook")
