@@ -88,7 +88,4 @@ public class AssignmentGrade {
 			return false;
 		return true;
 	}
-	
-	
-
 }

@@ -1,6 +1,7 @@
 package com.cst438.controllers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,13 @@ import com.cst438.domain.CourseDTOG;
 import com.cst438.domain.CourseRepository;
 import com.cst438.domain.Enrollment;
 import com.cst438.domain.GradebookDTO;
+import com.cst438.domain.GradebookParamsObject;
 import com.cst438.services.RegistrationService;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001"})
@@ -48,35 +53,67 @@ public class GradeBookController {
 	//add new assignment
 	@PostMapping("/gradebook/{course_id}/add")
 	@Transactional
-	public void addAssignment(@RequestBody Date due_date, @RequestBody String name, @PathVariable int course_id) {
-//		String email = "dwisneski@csumb.edu";
-		
-		assignmentRepository.addNewAssignment(due_date, name, course_id);
-		
-//		Assignment newAssignment = new Assignment();
-//		newAssignment.setName(name);
-//		newAssignment.setDueDate(date);
+	public void addAssignment(@RequestBody GradebookParamsObject g, @PathVariable int course_id) {
+//		Calendar cal = Calendar.getInstance(); 
+//		cal.setTime(g.getDueDate()); 
+//		cal.add(Calendar.DATE, 1);
 //		
-//		List<Assignment> assignments = assignmentRepository.getAssignmentListByCourseID(email, course_id);
-//		assignments.add(newAssignment);
-//		assignmentRepository.save(assignments);
+//		Date due_date = new Date(cal.getTimeInMillis());
+		Date due_date = g.getDueDate();
+		String name = g.getName();
+		Assignment a = new Assignment();
+		Course c = courseRepository.findById(course_id).orElse(null);
 		
+		if(c == null) {
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Invalid course primary key.");
+		}
+		
+		a.setDueDate(due_date);
+		a.setName(name);
+		a.setCourse(c);
+		
+		assignmentRepository.save(a);
+		
+		c.getAssignments().add(a);
+		courseRepository.save(c);
+		
+//		AssignmentGrade ag = new AssignmentGrade();
+//		ag.setAssignment(a);
+//		ag.setScore("");
+//		assignmentGradeRepository.save(ag);
 	}
 	
-	//change name of assignment
-	@PostMapping("/gradebook/{id}/updateName")
+	//change name of assignment by ID
+	@PostMapping("/gradebook/{assignment_id}/updateName")
 	@Transactional
-	public void updateAssignmentName(@RequestBody String name, @PathVariable int assignment_id) {
-		assignmentRepository.updateAssignmentName(name, assignment_id);
-			
+	public void updateAssignmentName(@RequestBody GradebookParamsObject g, @PathVariable int assignment_id) {
+		String email = "dwisneski@csumb.edu";
+		Assignment a = checkAssignment(assignment_id, email);
+		
+		String name = g.getName();
+		a.setName(name);
+		
+		assignmentRepository.save(a);
 	}
 	
 	//delete assignment
-	@PostMapping("/gradebook/{id}/delete")
+	@PostMapping("/gradebook/{assignment_id}/delete")
 	@Transactional
 	public void deleteAssignment(@PathVariable int assignment_id) {
-		assignmentRepository.deleteAssignment(assignment_id);
-				
+		String email = "dwisneski@csumb.edu";
+		Assignment a = checkAssignment(assignment_id, email);
+		
+		AssignmentGrade gr = assignmentGradeRepository.findByAssignmentId(assignment_id);
+		if(gr != null && !gr.getScore().isEmpty()) {
+			System.out.println("Unable to delete assignment. Contains grades.");
+			return;
+		}
+		
+		Course c = a.getCourse();
+		c.getAssignments().remove(a);
+		
+		assignmentRepository.deleteById(assignment_id);
+		courseRepository.save(c);
 	}
 	
 	// get assignments for an instructor that need grading
