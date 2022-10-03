@@ -51,7 +51,7 @@ public class GradeBookController {
 	RegistrationService registrationService;
 	
 	//add new assignment
-	@PostMapping("/gradebook/{course_id}/add")
+	@PostMapping("/gradebook/newAssignment/{course_id}")
 	@Transactional
 	public void addAssignment(@RequestBody GradebookParamsObject g, @PathVariable int course_id) {
 //		Calendar cal = Calendar.getInstance(); 
@@ -84,7 +84,7 @@ public class GradeBookController {
 	}
 	
 	//change name of assignment by ID
-	@PostMapping("/gradebook/{assignment_id}/updateName")
+	@PostMapping("/gradebook/updateAssignment/{assignment_id}")
 	@Transactional
 	public void updateAssignmentName(@RequestBody GradebookParamsObject g, @PathVariable int assignment_id) {
 		String email = "dwisneski@csumb.edu";
@@ -97,7 +97,7 @@ public class GradeBookController {
 	}
 	
 	//delete assignment
-	@PostMapping("/gradebook/{assignment_id}/delete")
+	@PostMapping("/gradebook/deleteAssignment/{assignment_id}")
 	@Transactional
 	public void deleteAssignment(@PathVariable int assignment_id) {
 		String email = "dwisneski@csumb.edu";
@@ -115,6 +115,24 @@ public class GradeBookController {
 		assignmentRepository.deleteById(assignment_id);
 		courseRepository.save(c);
 	}
+	
+	//get course id and title by instructor email
+//	@GetMapping("/gradebook/getCourseDetails/{instructor}")
+//	public List<CourseDetailDTO> getCourseDetails(@PathVariable String instructor) {
+////		String email = "dwisneski@csumb.edu";
+//		List<Course> courses = courseRepository.findCourseByEmail(instructor);
+//		if(courses == null) {
+//			System.out.println("Instructor does not teach any courses");
+//			return null;
+//		}
+//		
+//		List<CourseDetailDTO> cd = new ArrayList<>();
+//		
+//		for(Course c : courses) {
+//			cd.add(new CourseDetailDTO(c.getCourse_id(), c.getTitle()));
+//		}
+//		return cd;
+//	}
 	
 	// get assignments for an instructor that need grading
 	@GetMapping("/gradebook")
