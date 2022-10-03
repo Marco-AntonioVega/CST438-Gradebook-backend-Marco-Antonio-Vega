@@ -113,7 +113,7 @@ class Cst438GradebookApplicationTests {
 		params.setDueDate(java.sql.Date.valueOf(TEST_DUE_DATE));
 
 		// then do an http post request for adding new assignment
-		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/" + TEST_COURSE_ID + "/add")
+		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/newAssignment/" + TEST_COURSE_ID)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(asJsonString(params)).contentType(MediaType.APPLICATION_JSON))
 		.andReturn().getResponse();
@@ -176,7 +176,7 @@ class Cst438GradebookApplicationTests {
 		params.setName(TEST_ASSIGNMENT_NAME);
 
 		// then do an http post request for changing assignment name
-		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/" + TEST_ASSIGNMENT_ID + "/updateName")
+		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/updateAssignment/" + TEST_ASSIGNMENT_ID)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(asJsonString(params)).contentType(MediaType.APPLICATION_JSON))
 		.andReturn().getResponse();
@@ -234,7 +234,7 @@ class Cst438GradebookApplicationTests {
 		// end of mock data
 		
 		// then do an http post request for deleting assignment
-		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/" + TEST_ASSIGNMENT_ID + "/delete")
+		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/deleteAssignment/" + TEST_ASSIGNMENT_ID)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON))
 		.andReturn().getResponse();
@@ -295,7 +295,7 @@ class Cst438GradebookApplicationTests {
 		// end of mock data
 
 		// then do an http post request for deleting assignment
-		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/" + TEST_ASSIGNMENT_ID + "/delete")
+		response = mvc.perform(MockMvcRequestBuilders.post("/gradebook/deleteAssignment/" + TEST_ASSIGNMENT_ID)
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON))
 		.andReturn().getResponse();
