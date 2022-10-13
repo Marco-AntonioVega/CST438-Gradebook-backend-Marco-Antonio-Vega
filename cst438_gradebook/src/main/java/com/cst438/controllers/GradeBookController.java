@@ -71,7 +71,7 @@ public class GradeBookController {
 		a.setDueDate(due_date);
 		a.setName(name);
 		a.setCourse(c);
-		
+		a.setNeedsGrading(1);
 		assignmentRepository.save(a);
 		
 		c.getAssignments().add(a);
