@@ -13,9 +13,8 @@ CREATE TABLE `course` (
   PRIMARY KEY (`course_id`)
 );
 
-insert into course values(123456, 'dwisneski@csumb.edu', 'fall', 'cst438-software engineering', 2021);
+insert into course values(123456, 'marvega@csumb.edu', 'fall', 'cst438-software engineering', 2021);
 insert into course values(999001, 'dwisneski@csumb.edu', 'fall', 'cst363-database', 2021);
-
 
 
 DROP TABLE IF EXISTS `enrollment`;
@@ -33,6 +32,7 @@ insert into enrollment values(null, 'student1@csumb.edu', 'Student One', 123456)
 insert into enrollment values(null, 'student2@csumb.edu', 'Student Two', 123456);
 insert into enrollment values(null, 'student1@csumb.edu', 'Student One', 999001);
 insert into enrollment values(null, 'student3@csumb.edu', 'Student Three', 999001);
+insert into enrollment values(null, '27344marcovega@gmail.com', 'Student Four', 123456);
 
 DROP TABLE IF EXISTS `assignment`;
 CREATE TABLE `assignment` (
